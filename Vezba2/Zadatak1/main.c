@@ -1,8 +1,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <stdint.h>
 
-volatile int16_t ms = 0;
+volatile unsigned long ms = 0;
+
+void my_delay(unsigned long milliseconds)
+{
+	while(ms - milliseconds < 500);
+}
 
 ISR(TIMER0_COMPA_vect)
 {
@@ -23,13 +27,9 @@ int main()
 
 	sei();        //globalna dozvola prekida
 
-	int16_t t0 = 0;
-
 	while(1)
 	{
-		t0 = ms;
-		while(ms - t0 < 500);
-
+		my_delay(ms);
 		PORTB ^= 1 << 5;
 	}
 
