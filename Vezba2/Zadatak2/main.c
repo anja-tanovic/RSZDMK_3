@@ -1,16 +1,19 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-volatile unsigned long fi = 0; //faktor ispune
+volatile unsigned char fi = 25; //faktor ispune
+volatile unsigned char pr = 0;  //povecava se svaki put kad se pojavi prekid
 
 ISR(TIMER0_COMPA_vect)
 {
-	fi++;
+	pr++;
 
-	if (fi == 256)
+	if (pr == 0){
+		PORTB |= 1 << 5;    //LED ON
+	}
+	if (pr == fi)
 	{
-		fi = 0;
-
+		PORTB &= ~(1 << 5); //LED OFF
 	}
 }
 
