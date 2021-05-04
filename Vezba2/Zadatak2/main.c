@@ -1,12 +1,18 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-volatile unsigned char fi = 25; //faktor ispune
-volatile unsigned char pr = 0;  //povecava se svaki put kad se pojavi prekid
+volatile unsigned char fi = 0;  //faktor ispune u pocetnom trenutku
+volatile unsigned long pr = 0;  //povecava se svaki put kad se pojavi prekid (posle 781 se uvecava fi)
 
 ISR(TIMER0_COMPA_vect)
 {
 	pr++;
+
+	if (pr == 781)
+	{
+		fi++;
+		pr = 0;
+	}
 
 	if (pr == 0){
 		PORTB |= 1 << 5;    //LED ON
