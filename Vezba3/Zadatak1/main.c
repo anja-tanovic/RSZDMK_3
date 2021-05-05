@@ -10,27 +10,47 @@
 #include <avr/interrupt.h>
 
 /// Makro za podesavanje visoke vrednosti signala na pinu
-#define HIGH 		1
+#define HIGH 				1
 /// Makro za podesavanje niske vrednosti signala na pinu
-#define LOW 		0
+#define LOW 				0
 
 /// Makro za podesavanje izlaznog smera pina
-#define OUTPUT 		1
+#define OUTPUT 				1
 /// Makro za podesavanje ulaznog smera pina
-#define INPUT 		0
+#define INPUT 				0
 
 /// Makro za selektovanje porta B
-#define PORT_B 		0
+#define PORT_B 				0
 /// Makro za selektovanje porta C
-#define PORT_C 		1
+#define PORT_C 				1
 /// Makro za selektovanje porta D
-#define PORT_D 		2
+#define PORT_D 				2
 
 /// Makro za selektovanje pina na koji je povezana dioda
-#define DIODE_PIN 	5
+#define DIODE_PIN 			5
+
+/// Makro za period sporog treperenja
+#define SLOW 				1000
+/// Makro za period brzog treperenja
+#define FAST 				300
+
+/// Makro za broj sporih treptaja
+#define SLOW_REPETITIONS	3
+/// Makro za broj brzih treptaja
+#define FAST_REPETITIONS	10
 
 /// Promenljiva koja skladisti broj milisekundi proteklih od pokretanja aplikacije
 volatile unsigned long ms = 0;
+
+/**
+ * pinPulsing - Funkcija koja implementira visestruko pulsiranje pina
+ * @param port - ulaz tipa unsigned char - port na kojem se implementira funkcionalnost
+ * @param pin - ulaz tipa unsigned char - pin na kojem se implementira funkcionalnost
+ * @param period - ulaz tipa unsigned long - duzina periode jednog treptaja
+ * @param num_of_repetitions - ulaz tipa unsigned char - broj treptaja koje treba napraviti
+ * @return Nema povratnu vrednost
+ */
+void pinPulsing(unsigned char port, unsigned char pin, unsigned long period, unsigned char num_of_repetitions);
 
 /**
  * pinPulse - Funkcija koja implementiran podizanje i spustanje vrednosti na pinu
@@ -77,15 +97,18 @@ unsigned long timer0DelayMs(unsigned long delay_length);
 void timer0InteruptInit();
 
 /**
+ * calculateHalfPeriod - Funkcija koja racuna polovinu periode
+ * @param period - ulaz tipa unsigned long - Perioda
+ * @return Povratna vrednost je tipa unsigned long i predstavlja polovnu periode
+ */
+unsigned long calculateHalfPeriod(unsigned long period);
+
+/**
  * main - funkcija koja implementiran glavni deo aplikacije
  * @return Nema povratnu vrednost
  */
 int main()
 {
-	unsigned long period = 1000; // Period jednog treptaja
-	unsigned char repetitions = 5; // Broj treptaja
-	int 		  i;
-
 	// Inicijalizacija
 	pinInit(PORT_B, DIODE_PIN, OUTPUT);
 	timer0InteruptInit();
@@ -93,15 +116,24 @@ int main()
 	// Glavna petlja
 	while (1)
 	{
-		// Treptanje
-		for (i = 0; i < repetitions; i++)
-			pinPulse(PORT_B, DIODE_PIN, period);
+		// Brzo treptanje
+		pinPulsing(PORT_B, DIODE_PIN, FAST, FAST_REPETITIONS);
+		// Sporo treptanje
+		pinPulsing(PORT_B, DIODE_PIN, SLOW, SLOW_REPETITIONS);
 
-		// Kraj
-		while (1)
-		;
 	}
 	return 0;
+}
+
+/******************************************************************************************/
+
+void pinPulsing(unsigned char port, unsigned char pin, unsigned long period, unsigned char num_of_repetitions)
+{
+	unsigned char i;
+
+	// Implementacija num_of_repetitions perioda
+	for (i = 0; i < num_of_repetitions; i++)
+		pinPulse(port, pin, period);
 }
 
 /******************************************************************************************/
@@ -110,11 +142,11 @@ void pinPulse(unsigned char port, unsigned char pin, unsigned long period)
 {
 	// Poluperioda u kojoj pin ima visoku vrednost
 	pinSetValue(port, pin, HIGH);
-	timer0DelayMs(period / 2);
+	timer0DelayMs(calculateHalfPeriod(period));
 
 	// Poluperioda u kojoj pin ima nisku vrednost
 	pinSetValue(port, pin, LOW);
-	timer0DelayMs(period / 2);
+	timer0DelayMs(calculateHalfPeriod(period));
 }
 
 /******************************************************************************************/
@@ -207,11 +239,13 @@ void timer0InteruptInit()
 
 /******************************************************************************************/
 
-/**
-* ISR - prekidna rutina tajmera 0 u modu CTC
-*/
 ISR(TIMER0_COMPA_vect)
 {
 	// Inkrementovanje broja milisekundi koje su prosle od pokretanja aplikacije
 	ms++;
+}
+
+unsigned long calculateHalfPeriod(unsigned long period)
+{
+	return (period / 2);
 }
