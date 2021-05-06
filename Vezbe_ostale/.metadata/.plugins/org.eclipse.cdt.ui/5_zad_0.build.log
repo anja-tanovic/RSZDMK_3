@@ -1,0 +1,53 @@
+21:14:40 **** Incremental Build of configuration Release for project 5_zad_0 ****
+make all 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega328p 5_zad_0.elf
+AVR Memory Usage
+----------------
+Device: atmega328p
+
+Program:     784 bytes (2.4% Full)
+(.text + .data + .bootloader)
+
+Data:          4 bytes (0.2% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+Invoking: AVRDude
+C:\Users\VTS-zaposleni\Downloads\NE BRISATI\eclipse\bin\avrdude -pm328p -carduino -PCOM3 -Uflash:w:5_zad_0.hex:a
+
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e950f
+avrdude: NOTE: FLASH memory has been specified, an erase cycle will be performed
+         To disable this feature, specify the -D option.
+avrdude: erasing chip
+avrdude: reading input file "5_zad_0.hex"
+avrdude: input file 5_zad_0.hex auto detected as Intel Hex
+avrdude: writing flash (784 bytes):
+
+Writing | ################################################## | 100% 0.13s
+
+avrdude: 784 bytes of flash written
+avrdude: verifying flash memory against 5_zad_0.hex:
+avrdude: load data flash data from input file 5_zad_0.hex:
+avrdude: input file 5_zad_0.hex auto detected as Intel Hex
+avrdude: input file 5_zad_0.hex contains 784 bytes
+avrdude: reading on-chip flash data:
+
+Reading | ################################################## | 100% 0.10s
+
+avrdude: verifying ...
+avrdude: 784 bytes of flash verified
+
+avrdude done.  Thank you.
+
+Finished building: avrdudedummy
+ 
+
+21:14:42 Build Finished. 0 errors, 0 warnings. (took 2s.221ms)
+

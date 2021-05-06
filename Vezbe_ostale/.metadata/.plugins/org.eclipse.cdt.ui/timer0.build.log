@@ -1,0 +1,35 @@
+21:07:33 **** Build of configuration Release for project timer0 ****
+make all 
+Building file: ../timer0.c
+Invoking: AVR Compiler
+avr-gcc -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega328p -DF_CPU=16000000UL -MMD -MP -MF"timer0.d" -MT"timer0.o" -c -o "timer0.o" "../timer0.c"
+Finished building: ../timer0.c
+ 
+Building target: libtimer0.a
+Invoking: AVR Archiver
+avr-ar -r  "libtimer0.a"  ./timer0.o  
+c:\Users\VTS-zaposleni\Downloads\NE BRISATI\eclipse\bin\avr-ar.exe: creating libtimer0.a
+Finished building target: libtimer0.a
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S libtimer0.a  >"libtimer0.lss"
+Finished building: libtimer0.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega328p libtimer0.a
+AVR Memory Usage
+----------------
+Device: atmega328p
+
+Program:       0 bytes (0.0% Full)
+(.text + .data + .bootloader)
+
+Data:          0 bytes (0.0% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+21:07:34 Build Finished. 0 errors, 0 warnings. (took 1s.141ms)
+

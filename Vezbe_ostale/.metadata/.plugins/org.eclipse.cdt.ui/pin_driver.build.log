@@ -1,0 +1,35 @@
+19:31:31 **** Build of configuration Release for project pin_driver ****
+make all 
+Building file: ../pin.c
+Invoking: AVR Compiler
+avr-gcc -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega328p -DF_CPU=16000000UL -MMD -MP -MF"pin.d" -MT"pin.o" -c -o "pin.o" "../pin.c"
+Finished building: ../pin.c
+ 
+Building target: libpin_driver.a
+Invoking: AVR Archiver
+avr-ar -r  "libpin_driver.a"  ./pin.o  
+c:\Users\VTS-zaposleni\Downloads\NE BRISATI\eclipse\bin\avr-ar.exe: creating libpin_driver.a
+Finished building target: libpin_driver.a
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S libpin_driver.a  >"libpin_driver.lss"
+Finished building: libpin_driver.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega328p libpin_driver.a
+AVR Memory Usage
+----------------
+Device: atmega328p
+
+Program:       0 bytes (0.0% Full)
+(.text + .data + .bootloader)
+
+Data:          0 bytes (0.0% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+19:31:32 Build Finished. 0 errors, 0 warnings. (took 1s.214ms)
+

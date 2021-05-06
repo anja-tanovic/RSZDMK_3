@@ -1,0 +1,9 @@
+#include <avr/io.h>
+#include "../timer0/timer0.h"
+#include "../pin_driver/pin.h"
+
+int main()
+{
+	pinInit(PORT_B, 5, OUTPUT);
+	return 0;
+}
